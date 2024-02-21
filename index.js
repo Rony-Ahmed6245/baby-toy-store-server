@@ -24,6 +24,7 @@ async function run() {
     try {
         await client.connect();
         const babyProductsCollection = client.db("babyProductDB").collection("babyProduct");
+        const cartProductsCollection = client.db("babyProductDB").collection("cartProduct");
 
         // POST method for adding baby products
         app.post("/v1/babyProduct", async (req, res) => {
@@ -37,6 +38,30 @@ async function run() {
                 res.status(500).send("Error adding product");
             }
         });
+        app.post("/v1/addtocart", async (req, res) => {
+            try {
+                const product = req.body;
+                const result = await cartProductsCollection.insertOne(product);
+                console.log(result);
+                res.status(201).send(result);
+            } catch (error) {
+                console.error("Error adding product:", error);
+                res.status(500).send("Error adding product");
+            }
+        });
+        // get data api 
+        app.get("/v1/babyProducts", async (req, res) => {
+            try {
+                const result = await babyProductsCollection.find().toArray();
+                console.log(result);
+                res.send(result);
+            } catch (error) {
+                console.error('Error in /v1/paymentCard route:', error);
+                res.status(500).send('Internal Server Error');
+            }
+        });
+
+
 
         console.log("Connected to MongoDB!");
     } catch (error) {
