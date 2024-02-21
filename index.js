@@ -38,6 +38,7 @@ async function run() {
                 res.status(500).send("Error adding product");
             }
         });
+        // 2nd post data 
         app.post("/v1/addtocart", async (req, res) => {
             try {
                 const product = req.body;
@@ -60,6 +61,18 @@ async function run() {
                 res.status(500).send('Internal Server Error');
             }
         });
+        // 2nd get data in here
+        app.get("/v1/cartProducts", async (req, res) => {
+            try {
+                const result = await cartProductsCollection.find().toArray();
+                console.log(result);
+                res.send(result);
+            } catch (error) {
+                console.error('Error in /v1/paymentCard route:', error);
+                res.status(500).send('Internal Server Error');
+            }
+        });
+// delete 
 
 
 
